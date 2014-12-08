@@ -1,0 +1,1 @@
+java -cp "bin;mysql-connector-java-5.1.23-bin.jar" base.Shell
