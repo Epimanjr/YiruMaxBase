@@ -16,6 +16,10 @@ import java.util.HashMap;
 public class BaseInformation implements Serializable {
 
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	/**
      * Map qui gère toutes les données
      */
     private HashMap<String, String> map = new HashMap<String, String>();
@@ -46,13 +50,15 @@ public class BaseInformation implements Serializable {
      *
      * @return les informations utiles
      */
-    public static BaseInformation lectureInformations(String filename) throws IOException, ClassNotFoundException {
+    @SuppressWarnings("unchecked")
+	public static BaseInformation lectureInformations(String filename) throws IOException, ClassNotFoundException {
         BaseInformation res = null;
 
         try {
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename));
             //On récupère simplement l'objet
             res = new BaseInformation((HashMap<String, String>) ois.readObject());
+            ois.close();
         } catch(NullPointerException e) {
            // System.out.println("Null pointer exception");
         }
