@@ -1,7 +1,9 @@
 package base;
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.Scanner;
+import java.util.Set;
 
 /**
  * Created by Maxime on 08/12/2014.
@@ -23,6 +25,10 @@ public class Shell {
         while(!line.equals("exit")) {
             String[] lines = line.split(" ");
             switch(lines[0]) {
+                case "list":
+                case "ls":
+                    lister();
+                    break;
                 case "new":
                     nouveau();
                     break;
@@ -39,6 +45,20 @@ public class Shell {
 
         // Fermeture
         sc.close();
+    }
+
+    /**
+     * On list les informations du fichier.
+     */
+    private static void lister() {
+        Set cles = BaseSetting.getInstance().bi.getMap().keySet();
+        Iterator it = cles.iterator();
+        while (it.hasNext()){
+            String cle = it.next().toString(); // tu peux typer plus finement ici
+            String valeur = BaseSetting.getInstance().bi.getMap().get(cle); // tu peux typer plus finement ici
+
+            System.out.println(cle + " => " + valeur);
+        }
     }
 
     /**
