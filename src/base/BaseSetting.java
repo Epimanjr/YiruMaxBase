@@ -1,5 +1,6 @@
 package base;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,7 +16,7 @@ public class BaseSetting {
     /**
      * BaseInformation, qui contient les informations lues dans le fichier.
      */
-    private BaseInformation bi;
+    public  BaseInformation bi;
 
     /**
      * Nom du driver, mais qui se trouve normalement dans le fichier. Pour
@@ -49,25 +50,25 @@ public class BaseSetting {
     private static final BaseSetting bs = new BaseSetting();
 
     /**
+     * Le nom du fichier où sont stockées les informations.
+     */
+    public static String filename = "info.bdd";
+
+    /**
      * Constructeur vide
      */
     public BaseSetting() {
         // Lecture des informations à partir du fichier.
-        lireInformation();
-    }
-
-    /**
-     * Méthode qui se charge de lire les informations.
-     */
-    public final void lireInformation() {
-        // Lecture
-        bi = BaseInformation.lectureInformations();
-
-        if (bi == null) {
-            // La lecture a échoué
-            Affichage.afficherMessageErreur("Les informations de connexion sont mal renseignées.");
+        try {
+            this.bi = BaseInformation.lectureInformations(filename);
+        } catch (IOException e) {
+            System.out.println("IOException lors de la lecture de " + filename);
+            //e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
+
 
     /**
      * Constructeur avec les informations de la base de données.
@@ -83,7 +84,7 @@ public class BaseSetting {
      *
      * @return BaseSetting
      */
-    public static BaseSetting getInstante() {
+    public static BaseSetting getInstance() {
         return bs;
     }
 
@@ -95,9 +96,8 @@ public class BaseSetting {
      */
     public boolean insert(String query) {
         try {
-            if (Donnees.modeVerbeux) {
-                System.out.println(query + " ... ");
-            }
+            System.out.println(query + " ... ");
+
             // Insertion.
             setStatement(getConnection().createStatement());
             getStatement().executeUpdate(query);
@@ -106,9 +106,7 @@ public class BaseSetting {
             return true;
         } catch (SQLException ex) {
             // Si mode verbeux, on affiche un message d'erreur
-            if (Donnees.modeVerbeux) {
-                System.out.println("SQLException pour : " + query);
-            }
+            System.out.println("SQLException pour : " + query);
         }
 
         // NON OK, pas bien exécutée.
@@ -123,9 +121,7 @@ public class BaseSetting {
      */
     public boolean select(String query) {
         try {
-            if (Donnees.modeVerbeux) {
-                System.out.println(query + " ... ");
-            }
+            System.out.println(query + " ... ");
 
             // Sélection
             this.setStatement(getConnection().createStatement());
@@ -135,9 +131,7 @@ public class BaseSetting {
             return true;
         } catch (SQLException ex) {
             // Si mode verbeux, on affiche un message d'erreur
-            if (Donnees.modeVerbeux) {
-                System.out.println("SQLException pour : " + query);
-            }
+            System.out.println("SQLException pour : " + query);
         }
 
         // NON OK, pas bien exécuté
@@ -152,9 +146,7 @@ public class BaseSetting {
      */
     public boolean selectBis(String query) {
         try {
-            if (Donnees.modeVerbeux) {
-                System.out.println(query + " ... ");
-            }
+            System.out.println(query + " ... ");
 
             // Sélection
             this.setStatement(getConnection().createStatement());
@@ -164,9 +156,7 @@ public class BaseSetting {
             return true;
         } catch (SQLException ex) {
             // Si mode verbeux, on affiche un message d'erreur
-            if (Donnees.modeVerbeux) {
-                System.out.println("SQLException pour : " + query);
-            }
+            System.out.println("SQLException pour : " + query);
         }
 
         // NON OK, pas bien exécuté
@@ -183,7 +173,13 @@ public class BaseSetting {
 
         try {
             //On lit les informations du fichier, au cas où elles auraient changées.
-            this.bi = BaseInformation.lectureInformations("info.bdd");
+            try {
+                this.bi = BaseInformation.lectureInformations(filename);
+            } catch (IOException e) {
+                //e.printStackTrace();
+                System.out.println("Erreur lors de la lecture des informations.");
+                return false;
+            }
 
             Class.forName(driver);
 
@@ -194,7 +190,7 @@ public class BaseSetting {
             //Création du path
             String dbPath = String.format(
                     "jdbc:%s:%s/%s?user=%s&password=%s&characterEncoding=utf-8&"
-                    + "useUnicode=true", bi.getDriver(), bi.getUrl(), bi.getDbname(), bi.getLogin(), bi.getPassword());
+                    + "useUnicode=true", bi.getMap().get("driver"), bi.getMap().get("url"), bi.getMap().get("dbname"), bi.getMap().get("login"),bi.getMap().get("password") );
 
             //Initiatialisation de la connection
             connection = java.sql.DriverManager.getConnection(dbPath);
@@ -228,33 +224,6 @@ public class BaseSetting {
         stat.execute(myquery);
     }
 
-    /**
-     * Récupère l'objet BaseInformation, qui contient toutes les informations
-     * (juste les valeurs)
-     *
-     * @return les informations utiles
-     */
-    public BaseInformation getBaseInformations() {
-        return this.bi;
-    }
-
-    /**
-     * Met à jour les informations du fichier.
-     *
-     */
-    public void miseAJourInfo() {
-        bi = BaseInformation.lectureInformations();
-    }
-
-    /**
-     * Récupère l'objet BaseInformation, qui contient toutes les informations
-     * (juste les valeurs)
-     *
-     * @return les informations utiles
-     */
-    public BaseInformation getBi() {
-        return bi;
-    }
 
     /**
      * Permet de récupérer la connexion à la base.

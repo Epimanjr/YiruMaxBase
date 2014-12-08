@@ -46,16 +46,27 @@ public class BaseInformation implements Serializable {
      *
      * @return les informations utiles
      */
-    public static BaseInformation lectureInformations(String filename) throws FileNotFoundException, IOException, ClassNotFoundException {
+    public static BaseInformation lectureInformations(String filename) throws IOException, ClassNotFoundException {
         BaseInformation res = null;
 
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
-            //On récupère simplement l'objet.
+        try {
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename));
+            //On récupère simplement l'objet
             res = new BaseInformation((HashMap<String, String>) ois.readObject());
+        } catch(NullPointerException e) {
+           // System.out.println("Null pointer exception");
         }
-        
 
         return res;
+    }
+
+    /**
+     * Modification d'une valeur de la HashMap
+     * @param cle Clé
+     * @param valeur Valeur
+     */
+    public void modifierValeur(String cle, String valeur) {
+        this.map.replace(cle, valeur);
     }
 
     /**
@@ -67,8 +78,15 @@ public class BaseInformation implements Serializable {
     public void ecrireInformations(String filename) throws FileNotFoundException, IOException {
 
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filename))) {
-            oos.writeObject(this);
+            oos.writeObject(this.map);
         }
     }
 
+    public HashMap<String, String> getMap() {
+        return map;
+    }
+
+    public void setMap(HashMap<String, String> map) {
+        this.map = map;
+    }
 }
