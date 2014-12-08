@@ -13,7 +13,7 @@ import java.util.HashMap;
  *
  * @author Maxime Blaise
  */
-public final class BaseInformation implements Serializable {
+public class BaseInformation implements Serializable {
 
     /**
      * Map qui gère toutes les données
@@ -49,7 +49,7 @@ public final class BaseInformation implements Serializable {
     public static BaseInformation lectureInformations(String filename) throws FileNotFoundException, IOException, ClassNotFoundException {
         BaseInformation res = null;
 
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename)) {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
             //On récupère simplement l'objet.
             res = new BaseInformation((HashMap<String, String>) ois.readObject());
         }
@@ -64,14 +64,11 @@ public final class BaseInformation implements Serializable {
      *
      * @return true if well-written
      */
-    public boolean ecrireInformations(String filename) throws FileNotFoundException, IOException {
+    public void ecrireInformations(String filename) throws FileNotFoundException, IOException {
 
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filename))) {
             oos.writeObject(this);
-            return true;
         }
-
-        return false;
     }
 
 }
