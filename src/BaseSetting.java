@@ -4,8 +4,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import newsupermdico.Affichage;
-import newsupermdico.donnees.Donnees;
 
 /**
  * Class BaseSetting, qui premet la connexion aux bases de données.
@@ -176,37 +174,16 @@ public class BaseSetting {
     }
 
     /**
-     * Met à jour les informations du fichier.
-     *
-     */
-    public void setInfo() {
-        this.bi = BaseInformation.lectureInformations();
-    }
-
-    /**
-     * Met à jour les informations du fichier.
-     *
-     */
-    public void setInformations() {
-        this.bi = BaseInformation.lectureInformations();
-    }
-
-    /**
      * Méthode qui test la connexion à la base, en initialisant l'objet
      * Connection
      *
      * @return true/false
      */
     public final boolean testerConnexion() {
-        /* if (bi.getDbname().equals("")) {
-         url = "jdbc:" + bi.getDriver() + ":" + bi.getUrl();
-         } else {
-         url = "jdbc:" + bi.getDriver() + ":" + bi.getUrl() + "/" + bi.getDbname();
-         }*/
 
         try {
             //On lit les informations du fichier, au cas où elles auraient changées.
-            setInformations();
+            this.bi = BaseInformation.lectureInformations("info.bdd");
 
             Class.forName(driver);
 
@@ -229,7 +206,7 @@ public class BaseSetting {
             return true;
         } catch (ClassNotFoundException | SQLException e) {
             // Affichage d'un message d'erreur.
-            Affichage.afficherMessageErreur("La connexion à la base de données a échoué.");
+            System.out.println("La connexion à la base de données a échoué.");
         }
 
         //Erreur quelque part !
