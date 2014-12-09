@@ -1,1 +1,1 @@
-javac -cp "src;mysql-connector-java-5.1.23-bin.jar" -d "bin" src/base/Shell.java
+javac -encoding UTF8 -cp "src;mysql-connector-java-5.1.23-bin.jar" -d "bin" src/base/YiruMaxBase.java
