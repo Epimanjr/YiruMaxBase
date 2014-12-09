@@ -29,10 +29,15 @@ public class YiruMaxBase extends Application {
     }
 
     public static void main(String[] args) {
-    	launch(args);
+    	//launch(args);
+    	lancerApplication(args);
     	/*for(String s : Font.getFontNames()) {
     		System.out.println(s);
     	}*/
+    }
+
+    public static void lancerApplication(String[] args) {
+    	launch(args);
     }
 
     class Panel extends Group {
