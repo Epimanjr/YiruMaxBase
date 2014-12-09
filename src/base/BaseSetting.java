@@ -163,23 +163,29 @@ public class BaseSetting {
         return false;
     }
 
+    public final boolean testerConnexion() {
+        //On lit les informations du fichier, au cas où elles auraient changées.
+            try {
+                this.bi = BaseInformation.lectureInformations(filename);
+            } catch (Exception e) {
+                //e.printStackTrace();
+                System.out.println("Erreur lors de la lecture des informations.");
+                return false;
+            }
+
+        return testerConnexion(this.bi);
+    }
+
     /**
      * Méthode qui test la connexion à la base, en initialisant l'objet
      * Connection
      *
      * @return true/false
      */
-    public final boolean testerConnexion() {
+    public final boolean testerConnexion(BaseInformation bi) {
 
         try {
-            //On lit les informations du fichier, au cas où elles auraient changées.
-            try {
-                this.bi = BaseInformation.lectureInformations(filename);
-            } catch (IOException e) {
-                //e.printStackTrace();
-                System.out.println("Erreur lors de la lecture des informations.");
-                return false;
-            }
+            
 
             Class.forName(driver);
 

@@ -31,6 +31,24 @@ public class BaseInformation implements Serializable {
     	this.map = maplu;
     }
 
+    public BaseInformation(String driver, String dbname, String url) {
+        map.put("driver", driver);
+
+        switch(driver) {
+            case "mysql":
+                map.put("namedriver", "com.mysql.jdbc.Driver");
+                break;
+            default:
+                map.put("namedriver", "com.mysql.jdbc.Driver");
+                break;
+        }
+        
+        map.put("dbname", dbname);
+        map.put("login", "root");
+        map.put("password", "");
+        map.put("url", url);
+    }
+
     /**
      * Constructeur vide.
      * Se contente de remplir avec les valeurs par défaut.

@@ -102,8 +102,12 @@ public class YiruMaxBase extends Application {
         	testerConnexion = new Button("Test connection");
         	testerConnexion.setOnAction((ActionEvent event) -> {
         		//JOptionPane.showMessageDialog(null, "OK", "Database Connection", JOptionPane.INFORMATION_MESSAGE);
+        		testerConnexion.setDisable(false);
 
-        		connectionOK = (Math.random() * 10 < 5) ? true : false;
+        		BaseSetting bs = BaseSetting.getInstance();
+        		bs.bi = new BaseInformation(choixDriver.getValue(), saisies[0].getText(), saisies[1].getText());
+
+        		connectionOK = bs.testerConnexion(bs.bi);
         		if(connectionOK) {
         			labelRes.setTextFill(Color.web("#00ff00"));
         			labelRes.setText("Connection OK");
