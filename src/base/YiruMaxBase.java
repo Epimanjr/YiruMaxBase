@@ -37,6 +37,18 @@ public class YiruMaxBase extends Application {
          }*/
     }
 
+    /**
+     * Lance l'application sans argument.
+     */
+    public static void lancerApplication() {
+        lancerApplication(null);
+    }
+
+    /**
+     * Lance l'application avec arguments.
+     *
+     * @param args le tableau d'arguments.
+     */
     public static void lancerApplication(String[] args) {
         launch(args);
     }
