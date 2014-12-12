@@ -2,3 +2,4 @@ bin
 .idea
 YiruMaxBase.iml
 out
+/nbproject/private/
