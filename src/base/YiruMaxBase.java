@@ -53,7 +53,7 @@ public class YiruMaxBase extends Application {
         launch(args);
     }
 
-    class Panel extends Group {
+    public class Panel extends Group {
 
         // Tous les composants de la fenêtre
         private final Label labTitre = new Label("Gestion de la connexion");
@@ -120,14 +120,9 @@ public class YiruMaxBase extends Application {
                 BaseSetting bs = BaseSetting.getInstance();
                 bs.bi = new BaseInformation(choixDriver.getValue(), saisies[0].getText(), saisies[1].getText());
 
-                connectionOK = bs.testerConnexion(bs.bi);
-                if (connectionOK) {
-                    labelRes.setTextFill(Color.web("#00ff00"));
-                    labelRes.setText("Connection OK");
-                } else {
-                    labelRes.setTextFill(Color.web("#ff0000"));
-                    labelRes.setText("Connection NON OK");
-                }
+                DialogLogin dl = new DialogLogin(this);
+                dl.show();
+
             });
             testerConnexion.setTranslateX(width / 2 - 50);
             testerConnexion.setTranslateY(190);
@@ -145,6 +140,28 @@ public class YiruMaxBase extends Application {
             getChildren().add(testerConnexion);
             getChildren().add(labelRes);
             getChildren().add(pied);
+        }
+        
+        public void testerConnexion() {
+            BaseSetting bs = BaseSetting.getInstance();
+            connectionOK = bs.testerConnexion(bs.bi);
+                if (connectionOK) {
+                    labelRes.setTextFill(Color.web("#00ff00"));
+                    labelRes.setText("Connection OK");
+                } else {
+                    labelRes.setTextFill(Color.web("#ff0000"));
+                    labelRes.setText("Connection NON OK");
+                }
+        }
+
+        void autoriserConnexion(boolean b) {
+            if(b) {
+                labelRes.setVisible(true);
+                //testerConnexion.setDisable(false);
+            } else {
+                labelRes.setVisible(false);
+                //testerConnexion.setDisable(true);
+            }
         }
     }
 }

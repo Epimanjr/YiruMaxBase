@@ -22,10 +22,11 @@ public class BaseInformation implements Serializable {
 	/**
      * Map qui gère toutes les données
      */
-    private HashMap<String, String> map = new HashMap<String, String>();
+    private HashMap<String, String> map = new HashMap<>();
 
     /**
      * Constructeur qui initialise d'office la map.
+     * @param maplu .
      */
     public BaseInformation(HashMap<String, String> maplu) {
     	this.map = maplu;
@@ -66,17 +67,21 @@ public class BaseInformation implements Serializable {
     /**
      * Method which read all informations from infobdd.idb file.
      *
+     * @param filename nom du fichier.
      * @return les informations utiles
+     * @throws java.io.IOException .
+     * @throws java.lang.ClassNotFoundException .
      */
     @SuppressWarnings("unchecked")
 	public static BaseInformation lectureInformations(String filename) throws IOException, ClassNotFoundException {
         BaseInformation res = null;
 
         try {
-            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename));
             //On récupère simplement l'objet
-            res = new BaseInformation((HashMap<String, String>) ois.readObject());
-            ois.close();
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
+                //On récupère simplement l'objet
+                res = new BaseInformation((HashMap<String, String>) ois.readObject());
+            }
         } catch(NullPointerException e) {
            // System.out.println("Null pointer exception");
         }
@@ -97,7 +102,8 @@ public class BaseInformation implements Serializable {
      * This method is the most important in this class. It writes database
      * information in the file.
      *
-     * @return true if well-written
+     * @param filename nom du fichier
+     * @throws java.io.FileNotFoundException .
      */
     public void ecrireInformations(String filename) throws FileNotFoundException, IOException {
 
